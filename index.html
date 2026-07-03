@@ -46,10 +46,10 @@
     border-bottom: 1px solid rgba(201,168,76,0.14);
     flex-shrink: 0;
   }
-  #brand   { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; color: rgba(201,168,76,0.70); text-transform: uppercase; }
+  #brand   { font-size: 19px; font-weight: 700; letter-spacing: 2.5px; color: rgba(201,168,76,0.70); text-transform: uppercase; }
   #meta-row { display: flex; gap: 14px; align-items: center; }
-  #time    { font-size: 12px; font-weight: 600; color: rgba(245,243,238,0.55); }
-  #weather { font-size: 12px; color: rgba(245,243,238,0.50); }
+  #time    { font-size: 21px; font-weight: 600; color: rgba(245,243,238,0.55); }
+  #weather { font-size: 21px; color: rgba(245,243,238,0.50); }
 
   #col-nav {
     display: flex; gap: 0; margin-bottom: 10px;
@@ -58,7 +58,7 @@
   }
   .col-tab {
     flex: 1; text-align: center;
-    font-size: 9px; font-weight: 700; letter-spacing: 1.8px;
+    font-size: 16px; font-weight: 700; letter-spacing: 1.8px;
     text-transform: uppercase; padding: 4px 0 6px;
     color: rgba(245,243,238,0.28);
     border-bottom: 2px solid transparent;
@@ -86,7 +86,7 @@
   .screen.active { display: flex; }
 
   .chip {
-    display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    display: inline-block; font-size: 16px; font-weight: 700; letter-spacing: 2px;
     text-transform: uppercase; color: rgba(201,168,76,0.60); margin-bottom: 4px;
   }
   .shimmer-line {
@@ -101,22 +101,22 @@
     100% { background-position: 200% 0; opacity: 0; }
   }
 
-  .scent-name { font-size: 26px; font-weight: 800; color: #F5F3EE; line-height: 1.15; margin-bottom: 5px; }
-  .scent-name.medium { font-size: 21px; }
-  .scent-name.long   { font-size: 17px; }
-  .brand-line { font-size: 14px; font-weight: 700; color: rgba(201,168,76,0.85); letter-spacing: 0.4px; margin-bottom: 8px; }
-  .body-text  { font-size: 14px; font-weight: 400; color: rgba(245,243,238,0.72); line-height: 1.55; }
-  .heading    { font-size: 22px; font-weight: 800; color: #F5F3EE; margin-bottom: 6px; }
-  .subhead    { font-size: 14px; font-weight: 600; color: rgba(201,168,76,0.80); margin-bottom: 10px; }
+  .scent-name { font-size: 46px; font-weight: 800; color: #F5F3EE; line-height: 1.15; margin-bottom: 5px; }
+  .scent-name.medium { font-size: 37px; }
+  .scent-name.long   { font-size: 30px; }
+  .brand-line { font-size: 25px; font-weight: 700; color: rgba(201,168,76,0.85); letter-spacing: 0.4px; margin-bottom: 8px; }
+  .body-text  { font-size: 25px; font-weight: 400; color: rgba(245,243,238,0.72); line-height: 1.55; }
+  .heading    { font-size: 39px; font-weight: 800; color: #F5F3EE; margin-bottom: 6px; }
+  .subhead    { font-size: 25px; font-weight: 600; color: rgba(201,168,76,0.80); margin-bottom: 10px; }
   .stat-row   { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .stat-label { font-size: 12px; color: rgba(245,243,238,0.55); }
-  .stat-value { font-size: 15px; font-weight: 700; color: #F5F3EE; }
+  .stat-label { font-size: 21px; color: rgba(245,243,238,0.55); }
+  .stat-value { font-size: 26px; font-weight: 700; color: #F5F3EE; }
   .bar-track  { height: 5px; background: rgba(255,255,255,0.10); border-radius: 3px; margin: 2px 0 8px; flex: 1; margin-left: 8px; }
   .bar-fill   { height: 5px; background: #C9A84C; border-radius: 3px; transition: width 0.4s; box-shadow: 0 0 6px rgba(201,168,76,0.4); }
   .action-row { display: flex; gap: 8px; margin-top: 12px; }
   .action-btn {
     flex: 1; padding: 10px 4px; border-radius: 8px; border: 1px solid rgba(201,168,76,0.35);
-    background: rgba(201,168,76,0.12); font-size: 13px; font-weight: 700;
+    background: rgba(201,168,76,0.12); font-size: 23px; font-weight: 700;
     color: #C9A84C; text-align: center; cursor: pointer;
     transition: all 0.15s;
   }
@@ -126,7 +126,7 @@
   }
   .action-btn.primary { background: rgba(201,168,76,0.22); }
 
-  .scan-pulse { font-size: 36px; text-align: center; margin: 10px 0; animation: pulse 1.2s ease-in-out infinite; }
+  .scan-pulse { font-size: 63px; text-align: center; margin: 10px 0; animation: pulse 1.2s ease-in-out infinite; }
   @keyframes pulse { 0%,100% { opacity: 0.4; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } }
   .scan-ring {
     width: 80px; height: 80px; border-radius: 50%; margin: 10px auto;
@@ -145,7 +145,7 @@
   .rdot { width: 5px; height: 5px; border-radius: 50%; background: rgba(201,168,76,0.20); transition: all 0.2s; }
   .rdot.active { background: #C9A84C; box-shadow: 0 0 6px rgba(201,168,76,0.55); }
 
-  #hint { position: absolute; bottom: 8px; right: 12px; font-size: 10px; font-weight: 600; color: rgba(245,243,238,0.18); letter-spacing: 0.4px; }
+  #hint { position: absolute; bottom: 8px; right: 12px; font-size: 18px; font-weight: 600; color: rgba(245,243,238,0.18); letter-spacing: 0.4px; }
 
   #flash { position: fixed; inset: 0; z-index: 10; background: rgba(201,168,76,0.07); pointer-events: none; opacity: 0; transition: opacity 0.15s; }
 
@@ -290,7 +290,7 @@
     <div class="screen" id="s-action_done">
       <div class="chip">DONE</div>
       <div class="shimmer-line"></div>
-      <div style="font-size:40px;text-align:center;margin:8px 0">&#10003;</div>
+      <div style="font-size:70px;text-align:center;margin:8px 0">&#10003;</div>
       <div class="heading" style="text-align:center" id="done-title">Logged!</div>
       <div class="body-text" style="text-align:center" id="done-sub"></div>
     </div>
@@ -315,6 +315,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 // ── Mutable globals (set by boot) ──────────────────────────────────────────
 let USER_ID = null;
+let CODE    = null;
 let PICKS   = [];
 
 // ── Nav state ──────────────────────────────────────────────────────────────
@@ -367,6 +368,7 @@ async function boot() {
         const { data: init, error: initErr } = await sb.rpc('glasses_init', { p_code: code });
         if (initErr) { showError('DB error: ' + initErr.message); return; }
         if (init?.error) { showError('Invalid pairing code'); return; }
+        CODE    = code;
         USER_ID = init.user_id;
         PICKS   = init.picks || [];
       }
@@ -596,10 +598,7 @@ function drawHrRing(bpm) {
 
 // ── Lazy data loaders ───────────────────────────────────────────────────────
 async function loadVault() {
-  const { data } = await sb.from('fragrances')
-    .select('id, name, brand, times_worn, worn_at')
-    .eq('user_id', USER_ID).eq('is_archived', false)
-    .order('times_worn', { ascending: false }).limit(20);
+  const { data } = await sb.rpc('glasses_get_vault', { p_code: CODE });
   vaultData = data || [];
   document.getElementById('vault-count').textContent = vaultData.length + ' fragrances';
   document.getElementById('vault-sub').textContent   = 'Total in your collection';
@@ -628,11 +627,7 @@ async function loadVault() {
 }
 
 async function loadSillage() {
-  const { data: logs } = await sb.from('wear_logs')
-    .select('heart_rate_bpm, worn_at, compliments_received')
-    .eq('user_id', USER_ID)
-    .not('heart_rate_bpm', 'is', null)
-    .order('worn_at', { ascending: false }).limit(30);
+  const { data: logs } = await sb.rpc('glasses_get_sillage', { p_code: CODE });
   sillageData = logs || [];
   const avgHr = sillageData.length
     ? Math.round(sillageData.reduce((s, l) => s + (l.heart_rate_bpm || 0), 0) / sillageData.length) : 0;
@@ -703,7 +698,7 @@ if (navigator.geolocation) {
         const temp = Math.round(cw.temperature);
         const cond = cw.weathercode >= 61 ? 'rainy' : cw.weathercode >= 3 ? 'cloudy' : 'clear';
         const icon = cond === 'rainy' ? '&#127783;' : cond === 'cloudy' ? '&#9925;' : '&#9728;';
-        document.getElementById('weather').textContent = icon + ' ' + temp + '°F · ' + cond;
+        document.getElementById('weather').innerHTML = icon + ' ' + temp + '&deg;F &middot; ' + cond;
       }).catch(() => {});
   }, () => {});
 }
