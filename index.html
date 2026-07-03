@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="mrbd-web-app-capable" content="yes">
 <meta name="viewport" content="width=600, height=600, initial-scale=1.0, user-scalable=no">
-<title>OlfÃ© Â· Glasses</title>
+<title>Olf&eacute; &middot; Glasses</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://esm.sh/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -161,7 +161,7 @@
   <div id="top-bar">
     <div style="display:flex;align-items:center;gap:8px">
       <div id="rt-dot"></div>
-      <div id="brand">&#10022; OlfÃ©</div>
+      <div id="brand">&#10022; Olf&eacute;</div>
     </div>
     <div id="meta-row">
       <div id="weather"></div>
@@ -174,15 +174,15 @@
     <div class="col-tab" data-col="1">VAULT</div>
     <div class="col-tab" data-col="2">SILLAGE</div>
     <div class="col-tab" data-col="3">SOCIAL</div>
-    <div class="col-tab" data-col="4">OLFÃ‰</div>
+    <div class="col-tab" data-col="4">OLF&Eacute;</div>
   </div>
 
   <div id="card">
     <!-- COL 0: LANDING -->
     <div class="screen active" id="s-0-0">
-      <div class="chip">OLFÃ‰ SUGGESTS</div>
+      <div class="chip">OLFÉ SUGGESTS</div>
       <div class="shimmer-line"></div>
-      <div class="scent-name" id="hero-name">Loadingâ€¦</div>
+      <div class="scent-name" id="hero-name">Loading&#8230;</div>
       <div class="brand-line" id="hero-brand"></div>
       <div class="body-text" id="hero-reason"></div>
     </div>
@@ -201,7 +201,7 @@
     <div class="screen" id="s-1-0">
       <div class="chip">YOUR VAULT</div>
       <div class="shimmer-line"></div>
-      <div class="heading" id="vault-count">â€” frags</div>
+      <div class="heading" id="vault-count">— frags</div>
       <div class="body-text" id="vault-sub"></div>
     </div>
     <div class="screen" id="s-1-1">
@@ -220,7 +220,7 @@
       <div class="chip">BIOMETRICS</div>
       <div class="shimmer-line"></div>
       <canvas id="hr-canvas" width="110" height="110"></canvas>
-      <div class="heading" style="text-align:center" id="hr-value">â€” BPM</div>
+      <div class="heading" style="text-align:center" id="hr-value">— BPM</div>
       <div class="body-text" style="text-align:center" id="hr-state">Waiting for watch data</div>
     </div>
     <div class="screen" id="s-2-1">
@@ -243,12 +243,12 @@
     <div class="screen" id="s-3-1">
       <div class="chip">DAILY POLL</div>
       <div class="shimmer-line"></div>
-      <div class="heading" id="poll-q">Loadingâ€¦</div>
+      <div class="heading" id="poll-q">Loading…</div>
     </div>
     <div class="screen" id="s-3-2">
       <div class="chip">TRIVIA</div>
       <div class="shimmer-line"></div>
-      <div class="body-text" id="trivia-text">Loadingâ€¦</div>
+      <div class="body-text" id="trivia-text">Loading…</div>
     </div>
     <div class="screen" id="s-3-3">
       <div class="chip">TRENDING</div>
@@ -256,26 +256,26 @@
       <div id="trending-list"></div>
     </div>
 
-    <!-- COL 4: OLFÃ‰ PICKS -->
-    <div class="screen" id="s-4-0"><div class="chip">TODAY'S PICK #1</div><div class="shimmer-line"></div><div class="scent-name" id="o0n">â€”</div><div class="brand-line" id="o0b"></div><div class="body-text" id="o0r"></div></div>
-    <div class="screen" id="s-4-1"><div class="chip">TODAY'S PICK #2</div><div class="shimmer-line"></div><div class="scent-name" id="o1n">â€”</div><div class="brand-line" id="o1b"></div><div class="body-text" id="o1r"></div></div>
-    <div class="screen" id="s-4-2"><div class="chip">TODAY'S PICK #3</div><div class="shimmer-line"></div><div class="scent-name" id="o2n">â€”</div><div class="brand-line" id="o2b"></div><div class="body-text" id="o2r"></div></div>
-    <div class="screen" id="s-4-3"><div class="chip">TODAY'S PICK #4</div><div class="shimmer-line"></div><div class="scent-name" id="o3n">â€”</div><div class="brand-line" id="o3b"></div><div class="body-text" id="o3r"></div></div>
-    <div class="screen" id="s-4-4"><div class="chip">TODAY'S PICK #5</div><div class="shimmer-line"></div><div class="scent-name" id="o4n">â€”</div><div class="brand-line" id="o4b"></div><div class="body-text" id="o4r"></div></div>
+    <!-- COL 4: OLFÉ PICKS -->
+    <div class="screen" id="s-4-0"><div class="chip">TODAY'S PICK #1</div><div class="shimmer-line"></div><div class="scent-name" id="o0n">—</div><div class="brand-line" id="o0b"></div><div class="body-text" id="o0r"></div></div>
+    <div class="screen" id="s-4-1"><div class="chip">TODAY'S PICK #2</div><div class="shimmer-line"></div><div class="scent-name" id="o1n">—</div><div class="brand-line" id="o1b"></div><div class="body-text" id="o1r"></div></div>
+    <div class="screen" id="s-4-2"><div class="chip">TODAY'S PICK #3</div><div class="shimmer-line"></div><div class="scent-name" id="o2n">—</div><div class="brand-line" id="o2b"></div><div class="body-text" id="o2r"></div></div>
+    <div class="screen" id="s-4-3"><div class="chip">TODAY'S PICK #4</div><div class="shimmer-line"></div><div class="scent-name" id="o3n">—</div><div class="brand-line" id="o3b"></div><div class="body-text" id="o3r"></div></div>
+    <div class="screen" id="s-4-4"><div class="chip">TODAY'S PICK #5</div><div class="shimmer-line"></div><div class="scent-name" id="o4n">—</div><div class="brand-line" id="o4b"></div><div class="body-text" id="o4r"></div></div>
 
     <!-- OVERLAY SCREENS -->
     <div class="screen" id="s-scanning">
       <div class="chip">SCANNING</div>
       <div class="shimmer-line"></div>
       <div class="scan-ring"></div>
-      <div class="heading" style="text-align:center;margin-top:8px" id="scan-name">Identifyingâ€¦</div>
+      <div class="heading" style="text-align:center;margin-top:8px" id="scan-name">Identifying…</div>
       <div class="body-text" style="text-align:center">Hold bottle steady</div>
     </div>
 
     <div class="screen" id="s-post_scan">
       <div class="chip">SCAN RESULT</div>
       <div class="shimmer-line"></div>
-      <div class="scent-name" id="ps-name">â€”</div>
+      <div class="scent-name" id="ps-name">—</div>
       <div class="brand-line" id="ps-brand"></div>
       <div class="action-row" style="margin-top:auto">
         <div class="action-btn primary focusable" id="ps-wear" tabindex="0">&#10003; LOG WEAR</div>
@@ -301,7 +301,7 @@
       <div id="candidate-list"></div>
     </div>
 
-    <div id="hint">&#9650;&#9660; rows Â· &#9664;&#9654; cols</div>
+    <div id="hint">&#9650;&#9660; rows · &#9664;&#9654; cols</div>
   </div>
 
   <div id="row-dots"></div>
@@ -309,15 +309,15 @@
 <div id="flash"></div>
 
 <script>
-// â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Config ─────────────────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://wqgwjdqprwohjvhpwhqs.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxZ3dqZHFwcndvaGp2aHB3aHFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNjc2MTIsImV4cCI6MjA5MjY0MzYxMn0.I8emtf2yeoFiCTcXcwliqjW0wlM4m_LDIWrz57m5wC4';
 
-// â”€â”€ Mutable globals (set by boot) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Mutable globals (set by boot) ──────────────────────────────────────────
 let USER_ID = null;
 let PICKS   = [];
 
-// â”€â”€ Nav state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Nav state ──────────────────────────────────────────────────────────────
 const ROW_COUNTS = [2, 3, 3, 4, 5];
 let col = 0, row = 0;
 let overlayScreen = null;
@@ -325,33 +325,51 @@ let latestHr = 0;
 let vaultData = null, sillageData = null, communityData = null;
 let scanPayload = {};
 
-// â”€â”€ Supabase client â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ── Supabase client (created in boot after library check) ──────────────────
+let sb = null;
 
-// â”€â”€ Boot: resolve pairing code then hydrate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function showError(msg) {
+  const hn = document.getElementById('hero-name');
+  hn.textContent = msg;
+  hn.className = 'scent-name long';
+  document.getElementById('hero-brand').textContent = '';
+  document.getElementById('hero-reason').textContent = '';
+  render();
+}
+
 async function boot() {
+  if (typeof supabase === 'undefined') {
+    showError('Network error: JS library failed to load');
+    return;
+  }
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
   document.getElementById('time').textContent =
     new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 
-  const params = new URLSearchParams(location.search);
-  const code   = params.get('code');
-  const id     = params.get('id');
+  try {
+    const params = new URLSearchParams(location.search);
+    const code   = params.get('code');
+    const id     = params.get('id');
 
-  if (code) {
-    const { data: pairing } = await sb
-      .from('glasses_pairing_codes')
-      .select('user_id').eq('code', code).eq('claimed', true).maybeSingle();
-    USER_ID = pairing?.user_id ?? null;
-  } else if (id) {
-    USER_ID = id;
-  }
+    if (code) {
+      const { data: pairing, error: pErr } = await sb
+        .from('glasses_pairing_codes')
+        .select('user_id').eq('code', code).maybeSingle();
+      if (pErr) { showError('DB error: ' + pErr.message); return; }
+      USER_ID = pairing?.user_id ?? null;
+    } else if (id) {
+      USER_ID = id;
+    }
 
-  if (!USER_ID) {
-    const hn = document.getElementById('hero-name');
-    hn.textContent = 'Invalid code';
-    hn.className = 'scent-name medium';
-    document.getElementById('hero-reason').textContent = 'Open ScentVault settings to get your pairing code.';
-    render();
+    if (!USER_ID) {
+      showError('Invalid pairing code');
+      document.getElementById('hero-reason').textContent = 'Open ScentVault settings to get your code.';
+      render();
+      return;
+    }
+  } catch (e) {
+    showError('Error: ' + e.message);
     return;
   }
 
@@ -378,7 +396,7 @@ async function boot() {
         .sort((a, b) => b._s - a._s).slice(0, 5)
         .map(f => ({ name: f.name, brand: f.brand||'', family: f.family||'', reason: buildFallbackReason(f, season) }));
     } else {
-      PICKS = [{ name: 'Open OlfÃ© on your phone', brand: '', family: '', reason: "Let OlfÃ© generate today's picks first." }];
+      PICKS = [{ name: 'Open Olfé on your phone', brand: '', family: '', reason: "Let Olfé generate today's picks first." }];
     }
   }
 
@@ -389,21 +407,21 @@ async function boot() {
 }
 
 function buildFallbackReason(f, season) {
-  if (f.times_worn >= 10) return 'A favourite â€” worn ' + f.times_worn + ' times.';
+  if (f.times_worn >= 10) return 'A favourite — worn ' + f.times_worn + ' times.';
   if (Array.isArray(f.seasons) && f.seasons.includes(season)) return 'A great choice for ' + season + '.';
   if (f.rating >= 4) return 'One of your highest-rated fragrances.';
-  if (f.family) return f.family + ' â€” a signature choice.';
+  if (f.family) return f.family + ' — a signature choice.';
   return 'From your Atelier.';
 }
 
-// â”€â”€ Picks population â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Picks population ────────────────────────────────────────────────────────
 function initPicks() {
   PICKS.forEach((p, i) => {
     const n = document.getElementById('o' + i + 'n');
     const b = document.getElementById('o' + i + 'b');
     const r = document.getElementById('o' + i + 'r');
     if (n) { n.textContent = p.name; setNameSize(n, p.name); }
-    if (b) b.textContent = p.brand ? p.brand.toUpperCase() + (p.family ? ' Â· ' + p.family : '') : '';
+    if (b) b.textContent = p.brand ? p.brand.toUpperCase() + (p.family ? ' · ' + p.family : '') : '';
     if (r) r.textContent = p.reason;
   });
   if (PICKS.length) {
@@ -419,7 +437,7 @@ function setNameSize(el, name) {
   el.className = 'scent-name' + (name.length > 32 ? ' long' : name.length > 20 ? ' medium' : '');
 }
 
-// â”€â”€ Render navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Render navigation ───────────────────────────────────────────────────────
 function render() {
   document.querySelectorAll('.col-tab').forEach(t => {
     t.classList.toggle('active', +t.dataset.col === col);
@@ -455,7 +473,7 @@ function flash() {
   setTimeout(() => f.style.opacity = '0', 120);
 }
 
-// â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Navigation ──────────────────────────────────────────────────────────────
 function navigate(dc, dr) {
   if (overlayScreen) return;
   col = Math.max(0, Math.min(4, col + dc));
@@ -489,18 +507,18 @@ document.addEventListener('touchend', e => {
   else if (Math.abs(dy) > 35) navigate(0, dy < 0 ? 1 : -1);
 });
 
-// â”€â”€ Scan / voice â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Scan / voice ────────────────────────────────────────────────────────────
 document.getElementById('btn-scan').addEventListener('click', () => {
   writeState('scan_requested', {});
   overlayScreen = 'scanning';
-  document.getElementById('scan-name').textContent = 'Identifyingâ€¦';
+  document.getElementById('scan-name').textContent = 'Identifying…';
   render();
 });
 document.getElementById('btn-voice').addEventListener('click', () => {
   writeState('voice_requested', {});
 });
 
-// â”€â”€ Post-scan actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Post-scan actions ───────────────────────────────────────────────────────
 document.getElementById('ps-wear').addEventListener('click',   () => writeState('action_chosen', { action: 'wear',           ...scanPayload }));
 document.getElementById('ps-add').addEventListener('click',    () => writeState('action_chosen', { action: 'add_collection', ...scanPayload }));
 document.getElementById('ps-wish').addEventListener('click',   () => writeState('action_chosen', { action: 'wishlist',       ...scanPayload }));
@@ -508,7 +526,7 @@ document.getElementById('ps-cancel').addEventListener('click', () => dismissOver
 
 function dismissOverlay() { overlayScreen = null; scanPayload = {}; render(); }
 
-// â”€â”€ Realtime â€” phone â†’ glasses â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Realtime — phone → glasses ──────────────────────────────────────────────
 function startRealtime() {
   sb.channel('glasses-state-' + USER_ID)
     .on('postgres_changes', {
@@ -527,13 +545,13 @@ function handleStateChange(row) {
   const p = row.payload || {};
   if (screen === 'scanning') {
     overlayScreen = 'scanning';
-    document.getElementById('scan-name').textContent = p.name ? 'Scanning ' + p.name + 'â€¦' : 'Identifyingâ€¦';
+    document.getElementById('scan-name').textContent = p.name ? 'Scanning ' + p.name + '…' : 'Identifying…';
     render(); return;
   }
   if (screen === 'post_scan') {
     scanPayload = p; overlayScreen = 'post_scan';
     const n = document.getElementById('ps-name');
-    n.textContent = p.name || 'â€”'; setNameSize(n, p.name || '');
+    n.textContent = p.name || '—'; setNameSize(n, p.name || '');
     document.getElementById('ps-brand').textContent = p.brand ? p.brand.toUpperCase() : '';
     document.getElementById('ps-wear').focus();
     render(); return;
@@ -546,7 +564,7 @@ function handleStateChange(row) {
       const [name, brand] = c.split('|');
       const btn = document.createElement('div');
       btn.className = 'action-btn focusable'; btn.tabIndex = 0;
-      btn.textContent = name + (brand ? ' â€” ' + brand : '');
+      btn.textContent = name + (brand ? ' — ' + brand : '');
       btn.style.marginBottom = '6px';
       btn.addEventListener('click', () => writeState('candidate_chosen', { name, brand }));
       list.appendChild(btn);
@@ -567,13 +585,14 @@ function handleStateChange(row) {
 }
 
 async function writeState(screen, payload) {
+  if (!sb || !USER_ID) return;
   await sb.from('glasses_session_state').upsert({
     user_id: USER_ID, screen, payload,
     updated_at: new Date().toISOString(),
   }, { onConflict: 'user_id' });
 }
 
-// â”€â”€ HR ring â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── HR ring ─────────────────────────────────────────────────────────────────
 function drawHrRing(bpm) {
   const canvas = document.getElementById('hr-canvas');
   if (!canvas) return;
@@ -592,7 +611,7 @@ function drawHrRing(bpm) {
   }
 }
 
-// â”€â”€ Lazy data loaders â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Lazy data loaders ───────────────────────────────────────────────────────
 async function loadVault() {
   const { data } = await sb.from('fragrances')
     .select('id, name, brand, times_worn, worn_at')
@@ -607,7 +626,7 @@ async function loadVault() {
     const div = document.createElement('div');
     div.className = 'stat-row';
     div.innerHTML =
-      '<span class="stat-label">' + (i+1) + '. ' + (f.name.length > 22 ? f.name.slice(0,22)+'â€¦' : f.name) + '</span>' +
+      '<span class="stat-label">' + (i+1) + '. ' + (f.name.length > 22 ? f.name.slice(0,22)+'…' : f.name) + '</span>' +
       '<span class="stat-value">' + (f.times_worn || 0) + 'x</span>';
     topList.appendChild(div);
   });
@@ -619,7 +638,7 @@ async function loadVault() {
     const div = document.createElement('div');
     div.className = 'stat-row';
     div.innerHTML =
-      '<span class="stat-label">' + (f.name.length > 22 ? f.name.slice(0,22)+'â€¦' : f.name) + '</span>' +
+      '<span class="stat-label">' + (f.name.length > 22 ? f.name.slice(0,22)+'…' : f.name) + '</span>' +
       '<span class="stat-value">' + (days === 0 ? 'today' : days + 'd ago') + '</span>';
     lastList.appendChild(div);
   });
@@ -636,13 +655,13 @@ async function loadSillage() {
     ? Math.round(sillageData.reduce((s, l) => s + (l.heart_rate_bpm || 0), 0) / sillageData.length) : 0;
   const totalCompliments = sillageData.reduce((s, l) => s + (l.compliments_received || 0), 0);
   document.getElementById('sillage-stats').innerHTML =
-    '<div class="stat-row"><span class="stat-label">Avg HR during wear</span><span class="stat-value">' + (avgHr || 'â€”') + ' bpm</span></div>' +
+    '<div class="stat-row"><span class="stat-label">Avg HR during wear</span><span class="stat-value">' + (avgHr || '—') + ' bpm</span></div>' +
     '<div class="stat-row"><span class="stat-label">Total compliments</span><span class="stat-value">' + totalCompliments + '</span></div>' +
     '<div class="stat-row"><span class="stat-label">Wear sessions tracked</span><span class="stat-value">' + sillageData.length + '</span></div>';
   const score = avgHr > 0 ? Math.round(Math.max(0, Math.min(100, 100 - ((avgHr - 60) / 60) * 100))) : 0;
   const label = score >= 70 ? 'CALMING' : score >= 40 ? 'BALANCED' : 'ENERGIZING';
   document.getElementById('serenity-content').innerHTML =
-    '<div class="heading" style="text-align:center">' + (score || 'â€”') + '</div>' +
+    '<div class="heading" style="text-align:center">' + (score || '—') + '</div>' +
     '<div class="subhead" style="text-align:center">' + label + '</div>' +
     '<div class="body-text" style="text-align:center">Your biometric serenity score based on heart rate during wear sessions.</div>';
 }
@@ -656,7 +675,7 @@ async function loadCommunity() {
   communityData.filter(p => p.type === 'wear').slice(0, 4).forEach(p => {
     const div = document.createElement('div');
     div.className = 'body-text'; div.style.marginBottom = '6px';
-    div.textContent = 'Â· ' + (p.title || '');
+    div.textContent = '· ' + (p.title || '');
     feedList.appendChild(div);
   });
   const poll = communityData.find(p => p.type === 'daily_poll');
@@ -673,7 +692,7 @@ async function loadCommunity() {
   });
 }
 
-// â”€â”€ Live HR from Supabase Realtime (watch sends HR via phone) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Live HR from Supabase Realtime (watch sends HR via phone) ───────────────
 function subscribeHr() {
   sb.channel('hr-' + USER_ID)
     .on('postgres_changes', {
@@ -684,13 +703,13 @@ function subscribeHr() {
       latestHr = p.new.bpm || 0;
       document.getElementById('hr-value').textContent = latestHr + ' BPM';
       document.getElementById('hr-state').textContent =
-        latestHr < 70 ? 'Calm Â· CALMING' : latestHr < 100 ? 'Steady Â· BALANCED' : 'Elevated Â· ENERGIZING';
+        latestHr < 70 ? 'Calm · CALMING' : latestHr < 100 ? 'Steady · BALANCED' : 'Elevated · ENERGIZING';
       if (col === 2 && row === 0) drawHrRing(latestHr);
     })
     .subscribe();
 }
 
-// â”€â”€ Weather (client-side geolocation) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Weather (client-side geolocation) ───────────────────────────────────────
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(pos => {
     const { latitude: lat, longitude: lon } = pos.coords;
@@ -701,7 +720,7 @@ if (navigator.geolocation) {
         const temp = Math.round(cw.temperature);
         const cond = cw.weathercode >= 61 ? 'rainy' : cw.weathercode >= 3 ? 'cloudy' : 'clear';
         const icon = cond === 'rainy' ? '&#127783;' : cond === 'cloudy' ? '&#9925;' : '&#9728;';
-        document.getElementById('weather').textContent = icon + ' ' + temp + 'Â°F Â· ' + cond;
+        document.getElementById('weather').textContent = icon + ' ' + temp + '°F · ' + cond;
       }).catch(() => {});
   }, () => {});
 }
@@ -711,7 +730,7 @@ setInterval(() => {
     new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 }, 60000);
 
-// â”€â”€ Boot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Boot ─────────────────────────────────────────────────────────────────────
 boot();
 </script>
 </body>
