@@ -352,52 +352,35 @@ async function boot() {
     const code   = params.get('code');
     const id     = params.get('id');
 
-    if (code) {
-      const { data: pairing, error: pErr } = await sb
-        .from('glasses_pairing_codes')
-        .select('user_id').eq('code', code).maybeSingle();
-      if (pErr) { showError('DB error: ' + pErr.message); return; }
-      USER_ID = pairing?.user_id ?? null;
-    } else if (id) {
-      USER_ID = id;
+    // glasses_init RPC: validates code + returns user_id and picks in one call
+    // Uses SECURITY DEFINER so anon key can read user-specific data safely
+    if (code || id) {
+      if (id) {
+        // Direct user ID (dev/testing mode)
+        USER_ID = id;
+        const today = new Date().toISOString().slice(0, 10);
+        const { data: ap } = await sb.from('olfe_daily_recs')
+          .select('scent,brand,reason,rank').eq('user_id', id).eq('rec_date', today)
+          .order('rank', { ascending: true }).limit(5);
+        PICKS = (ap || []).map(r => ({ name: r.scent, brand: r.brand||'', family: '', reason: r.reason||'' }));
+      } else {
+        const { data: init, error: initErr } = await sb.rpc('glasses_init', { p_code: code });
+        if (initErr) { showError('DB error: ' + initErr.message); return; }
+        if (init?.error) { showError('Invalid pairing code'); return; }
+        USER_ID = init.user_id;
+        PICKS   = init.picks || [];
+      }
     }
 
     if (!USER_ID) {
-      showError('Invalid pairing code');
-      document.getElementById('hero-reason').textContent = 'Open ScentVault settings to get your code.';
+      showError('No code provided');
+      document.getElementById('hero-reason').textContent = 'Open ScentVault settings to get your pairing code.';
       render();
       return;
     }
   } catch (e) {
     showError('Error: ' + e.message);
     return;
-  }
-
-  const today = new Date().toISOString().slice(0, 10);
-  const { data: aiPicks } = await sb
-    .from('olfe_daily_recs')
-    .select('scent, brand, reason, rank')
-    .eq('user_id', USER_ID).eq('rec_date', today)
-    .order('rank', { ascending: true }).limit(5);
-
-  if (aiPicks?.length) {
-    PICKS = aiPicks.map(r => ({ name: r.scent, brand: r.brand ?? '', family: '', reason: r.reason ?? '' }));
-  } else {
-    const { data: frags } = await sb
-      .from('fragrances')
-      .select('name, brand, family, seasons, rating, times_worn')
-      .eq('user_id', USER_ID).eq('is_archived', false)
-      .order('times_worn', { ascending: false }).limit(30);
-
-    if (frags?.length) {
-      const season = ['Winter','Winter','Spring','Spring','Spring','Summer','Summer','Summer','Autumn','Autumn','Autumn','Winter'][new Date().getMonth()];
-      PICKS = frags
-        .map(f => ({ ...f, _s: (f.times_worn||0)*3 + (f.rating||0)*10 + (Array.isArray(f.seasons)&&f.seasons.includes(season)?15:0) }))
-        .sort((a, b) => b._s - a._s).slice(0, 5)
-        .map(f => ({ name: f.name, brand: f.brand||'', family: f.family||'', reason: buildFallbackReason(f, season) }));
-    } else {
-      PICKS = [{ name: 'Open Olfé on your phone', brand: '', family: '', reason: "Let Olfé generate today's picks first." }];
-    }
   }
 
   initPicks();
