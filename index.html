@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="mrbd-web-app-capable" content="yes">
+<meta name="viewport" content="width=600, height=600, initial-scale=1.0, user-scalable=no">
+<title>OlfÃ© Â· Glasses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://esm.sh/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 600px; height: 600px; overflow: hidden;
+    background: #080810;
+    font-family: 'Nunito', -apple-system, sans-serif;
+    color: #F5F3EE;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 85% 85%, rgba(40,60,160,0.06) 0%, transparent 60%);
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+      rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 4px);
+  }
+
+  #app {
+    width: 600px; height: 600px;
+    display: flex; flex-direction: column;
+    padding: 14px 20px 12px;
+    position: relative; z-index: 2;
+  }
+
+  #top-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 10px; margin-bottom: 10px;
+    border-bottom: 1px solid rgba(201,168,76,0.14);
+    flex-shrink: 0;
+  }
+  #brand   { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; color: rgba(201,168,76,0.70); text-transform: uppercase; }
+  #meta-row { display: flex; gap: 14px; align-items: center; }
+  #time    { font-size: 12px; font-weight: 600; color: rgba(245,243,238,0.55); }
+  #weather { font-size: 12px; color: rgba(245,243,238,0.50); }
+
+  #col-nav {
+    display: flex; gap: 0; margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .col-tab {
+    flex: 1; text-align: center;
+    font-size: 9px; font-weight: 700; letter-spacing: 1.8px;
+    text-transform: uppercase; padding: 4px 0 6px;
+    color: rgba(245,243,238,0.28);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .col-tab.active { color: #C9A84C; border-bottom-color: #C9A84C; }
+
+  #card {
+    flex: 1; display: flex; flex-direction: column;
+    border: 1px solid rgba(201,168,76,0.30);
+    border-radius: 14px;
+    padding: 16px 20px 14px;
+    background: rgba(255,255,255,0.055);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 4px 32px rgba(0,0,0,0.50);
+    position: relative; overflow: hidden;
+    transition: opacity 0.15s;
+  }
+  #card::before {
+    content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.45), transparent);
+  }
+
+  .screen { display: none; flex-direction: column; flex: 1; }
+  .screen.active { display: flex; }
+
+  .chip {
+    display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(201,168,76,0.60); margin-bottom: 4px;
+  }
+  .shimmer-line {
+    height: 1px; margin-bottom: 12px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.50), transparent);
+    background-size: 200% 1px;
+    animation: shimmer 3.5s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; opacity: 0; }
+    15%  { opacity: 1; } 85% { opacity: 1; }
+    100% { background-position: 200% 0; opacity: 0; }
+  }
+
+  .scent-name { font-size: 26px; font-weight: 800; color: #F5F3EE; line-height: 1.15; margin-bottom: 5px; }
+  .scent-name.medium { font-size: 21px; }
+  .scent-name.long   { font-size: 17px; }
+  .brand-line { font-size: 14px; font-weight: 700; color: rgba(201,168,76,0.85); letter-spacing: 0.4px; margin-bottom: 8px; }
+  .body-text  { font-size: 14px; font-weight: 400; color: rgba(245,243,238,0.72); line-height: 1.55; }
+  .heading    { font-size: 22px; font-weight: 800; color: #F5F3EE; margin-bottom: 6px; }
+  .subhead    { font-size: 14px; font-weight: 600; color: rgba(201,168,76,0.80); margin-bottom: 10px; }
+  .stat-row   { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .stat-label { font-size: 12px; color: rgba(245,243,238,0.55); }
+  .stat-value { font-size: 15px; font-weight: 700; color: #F5F3EE; }
+  .bar-track  { height: 5px; background: rgba(255,255,255,0.10); border-radius: 3px; margin: 2px 0 8px; flex: 1; margin-left: 8px; }
+  .bar-fill   { height: 5px; background: #C9A84C; border-radius: 3px; transition: width 0.4s; box-shadow: 0 0 6px rgba(201,168,76,0.4); }
+  .action-row { display: flex; gap: 8px; margin-top: 12px; }
+  .action-btn {
+    flex: 1; padding: 10px 4px; border-radius: 8px; border: 1px solid rgba(201,168,76,0.35);
+    background: rgba(201,168,76,0.12); font-size: 13px; font-weight: 700;
+    color: #C9A84C; text-align: center; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .action-btn:focus, .action-btn.selected {
+    outline: none; border-color: #00d4ff;
+    box-shadow: 0 0 14px rgba(0,212,255,0.35); color: #F5F3EE;
+  }
+  .action-btn.primary { background: rgba(201,168,76,0.22); }
+
+  .scan-pulse { font-size: 36px; text-align: center; margin: 10px 0; animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 0.4; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } }
+  .scan-ring {
+    width: 80px; height: 80px; border-radius: 50%; margin: 10px auto;
+    border: 3px solid rgba(201,168,76,0.2);
+    border-top-color: #C9A84C;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #hr-canvas { display: block; margin: 0 auto 6px; }
+
+  #row-dots {
+    display: flex; justify-content: center; gap: 5px;
+    margin-top: 8px; flex-shrink: 0; height: 10px;
+  }
+  .rdot { width: 5px; height: 5px; border-radius: 50%; background: rgba(201,168,76,0.20); transition: all 0.2s; }
+  .rdot.active { background: #C9A84C; box-shadow: 0 0 6px rgba(201,168,76,0.55); }
+
+  #hint { position: absolute; bottom: 8px; right: 12px; font-size: 10px; font-weight: 600; color: rgba(245,243,238,0.18); letter-spacing: 0.4px; }
+
+  #flash { position: fixed; inset: 0; z-index: 10; background: rgba(201,168,76,0.07); pointer-events: none; opacity: 0; transition: opacity 0.15s; }
+
+  .focusable { transition: all 150ms ease; border: 2px solid transparent; }
+  .focusable:focus { outline: none; border-color: #00d4ff; box-shadow: 0 0 20px rgba(0,212,255,0.35); }
+
+  #rt-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.15); transition: background 0.4s; flex-shrink: 0; }
+  #rt-dot.live { background: #4caf50; box-shadow: 0 0 6px rgba(76,175,80,0.6); }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="top-bar">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div id="rt-dot"></div>
+      <div id="brand">&#10022; OlfÃ©</div>
+    </div>
+    <div id="meta-row">
+      <div id="weather"></div>
+      <div id="time"></div>
+    </div>
+  </div>
+
+  <div id="col-nav">
+    <div class="col-tab active" data-col="0">HOME</div>
+    <div class="col-tab" data-col="1">VAULT</div>
+    <div class="col-tab" data-col="2">SILLAGE</div>
+    <div class="col-tab" data-col="3">SOCIAL</div>
+    <div class="col-tab" data-col="4">OLFÃ‰</div>
+  </div>
+
+  <div id="card">
+    <!-- COL 0: LANDING -->
+    <div class="screen active" id="s-0-0">
+      <div class="chip">OLFÃ‰ SUGGESTS</div>
+      <div class="shimmer-line"></div>
+      <div class="scent-name" id="hero-name">Loadingâ€¦</div>
+      <div class="brand-line" id="hero-brand"></div>
+      <div class="body-text" id="hero-reason"></div>
+    </div>
+    <div class="screen" id="s-0-1">
+      <div class="chip">ACTIONS</div>
+      <div class="shimmer-line"></div>
+      <div class="heading">Log a Wear</div>
+      <div class="body-text" style="margin-bottom:14px">Point glasses at a bottle and scan, or say the name.</div>
+      <div class="action-row">
+        <div class="action-btn primary focusable" id="btn-scan" tabindex="0">&#9673; SCAN</div>
+        <div class="action-btn focusable" id="btn-voice" tabindex="0">&#127897; SPEAK</div>
+      </div>
+    </div>
+
+    <!-- COL 1: VAULT -->
+    <div class="screen" id="s-1-0">
+      <div class="chip">YOUR VAULT</div>
+      <div class="shimmer-line"></div>
+      <div class="heading" id="vault-count">â€” frags</div>
+      <div class="body-text" id="vault-sub"></div>
+    </div>
+    <div class="screen" id="s-1-1">
+      <div class="chip">TOP WORN</div>
+      <div class="shimmer-line"></div>
+      <div id="vault-top-list"></div>
+    </div>
+    <div class="screen" id="s-1-2">
+      <div class="chip">LAST WORN</div>
+      <div class="shimmer-line"></div>
+      <div id="vault-last-list"></div>
+    </div>
+
+    <!-- COL 2: SILLAGE -->
+    <div class="screen" id="s-2-0">
+      <div class="chip">BIOMETRICS</div>
+      <div class="shimmer-line"></div>
+      <canvas id="hr-canvas" width="110" height="110"></canvas>
+      <div class="heading" style="text-align:center" id="hr-value">â€” BPM</div>
+      <div class="body-text" style="text-align:center" id="hr-state">Waiting for watch data</div>
+    </div>
+    <div class="screen" id="s-2-1">
+      <div class="chip">WEAR STATS</div>
+      <div class="shimmer-line"></div>
+      <div id="sillage-stats"></div>
+    </div>
+    <div class="screen" id="s-2-2">
+      <div class="chip">SERENITY SCORE</div>
+      <div class="shimmer-line"></div>
+      <div id="serenity-content"></div>
+    </div>
+
+    <!-- COL 3: COMMUNITY -->
+    <div class="screen" id="s-3-0">
+      <div class="chip">COMMUNITY</div>
+      <div class="shimmer-line"></div>
+      <div id="community-feed-list"></div>
+    </div>
+    <div class="screen" id="s-3-1">
+      <div class="chip">DAILY POLL</div>
+      <div class="shimmer-line"></div>
+      <div class="heading" id="poll-q">Loadingâ€¦</div>
+    </div>
+    <div class="screen" id="s-3-2">
+      <div class="chip">TRIVIA</div>
+      <div class="shimmer-line"></div>
+      <div class="body-text" id="trivia-text">Loadingâ€¦</div>
+    </div>
+    <div class="screen" id="s-3-3">
+      <div class="chip">TRENDING</div>
+      <div class="shimmer-line"></div>
+      <div id="trending-list"></div>
+    </div>
+
+    <!-- COL 4: OLFÃ‰ PICKS -->
+    <div class="screen" id="s-4-0"><div class="chip">TODAY'S PICK #1</div><div class="shimmer-line"></div><div class="scent-name" id="o0n">â€”</div><div class="brand-line" id="o0b"></div><div class="body-text" id="o0r"></div></div>
+    <div class="screen" id="s-4-1"><div class="chip">TODAY'S PICK #2</div><div class="shimmer-line"></div><div class="scent-name" id="o1n">â€”</div><div class="brand-line" id="o1b"></div><div class="body-text" id="o1r"></div></div>
+    <div class="screen" id="s-4-2"><div class="chip">TODAY'S PICK #3</div><div class="shimmer-line"></div><div class="scent-name" id="o2n">â€”</div><div class="brand-line" id="o2b"></div><div class="body-text" id="o2r"></div></div>
+    <div class="screen" id="s-4-3"><div class="chip">TODAY'S PICK #4</div><div class="shimmer-line"></div><div class="scent-name" id="o3n">â€”</div><div class="brand-line" id="o3b"></div><div class="body-text" id="o3r"></div></div>
+    <div class="screen" id="s-4-4"><div class="chip">TODAY'S PICK #5</div><div class="shimmer-line"></div><div class="scent-name" id="o4n">â€”</div><div class="brand-line" id="o4b"></div><div class="body-text" id="o4r"></div></div>
+
+    <!-- OVERLAY SCREENS -->
+    <div class="screen" id="s-scanning">
+      <div class="chip">SCANNING</div>
+      <div class="shimmer-line"></div>
+      <div class="scan-ring"></div>
+      <div class="heading" style="text-align:center;margin-top:8px" id="scan-name">Identifyingâ€¦</div>
+      <div class="body-text" style="text-align:center">Hold bottle steady</div>
+    </div>
+
+    <div class="screen" id="s-post_scan">
+      <div class="chip">SCAN RESULT</div>
+      <div class="shimmer-line"></div>
+      <div class="scent-name" id="ps-name">â€”</div>
+      <div class="brand-line" id="ps-brand"></div>
+      <div class="action-row" style="margin-top:auto">
+        <div class="action-btn primary focusable" id="ps-wear" tabindex="0">&#10003; LOG WEAR</div>
+        <div class="action-btn focusable" id="ps-add" tabindex="0">+ ATELIER</div>
+        <div class="action-btn focusable" id="ps-wish" tabindex="0">&#9733; WISH</div>
+      </div>
+      <div class="action-row">
+        <div class="action-btn focusable" id="ps-cancel" tabindex="0" style="color:rgba(245,243,238,0.45);border-color:rgba(255,255,255,0.12)">&#8592; BACK</div>
+      </div>
+    </div>
+
+    <div class="screen" id="s-action_done">
+      <div class="chip">DONE</div>
+      <div class="shimmer-line"></div>
+      <div style="font-size:40px;text-align:center;margin:8px 0">&#10003;</div>
+      <div class="heading" style="text-align:center" id="done-title">Logged!</div>
+      <div class="body-text" style="text-align:center" id="done-sub"></div>
+    </div>
+
+    <div class="screen" id="s-candidates">
+      <div class="chip">CHOOSE FRAGRANCE</div>
+      <div class="shimmer-line"></div>
+      <div id="candidate-list"></div>
+    </div>
+
+    <div id="hint">&#9650;&#9660; rows Â· &#9664;&#9654; cols</div>
+  </div>
+
+  <div id="row-dots"></div>
+</div>
+<div id="flash"></div>
+
+<script>
+// â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const SUPABASE_URL = 'https://wqgwjdqprwohjvhpwhqs.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxZ3dqZHFwcndvaGp2aHB3aHFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNjc2MTIsImV4cCI6MjA5MjY0MzYxMn0.I8emtf2yeoFiCTcXcwliqjW0wlM4m_LDIWrz57m5wC4';
+
+// â”€â”€ Mutable globals (set by boot) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+let USER_ID = null;
+let PICKS   = [];
+
+// â”€â”€ Nav state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const ROW_COUNTS = [2, 3, 3, 4, 5];
+let col = 0, row = 0;
+let overlayScreen = null;
+let latestHr = 0;
+let vaultData = null, sillageData = null, communityData = null;
+let scanPayload = {};
+
+// â”€â”€ Supabase client â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// â”€â”€ Boot: resolve pairing code then hydrate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+async function boot() {
+  document.getElementById('time').textContent =
+    new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+  const params = new URLSearchParams(location.search);
+  const code   = params.get('code');
+  const id     = params.get('id');
+
+  if (code) {
+    const { data: pairing } = await sb
+      .from('glasses_pairing_codes')
+      .select('user_id').eq('code', code).eq('claimed', true).maybeSingle();
+    USER_ID = pairing?.user_id ?? null;
+  } else if (id) {
+    USER_ID = id;
+  }
+
+  if (!USER_ID) {
+    const hn = document.getElementById('hero-name');
+    hn.textContent = 'Invalid code';
+    hn.className = 'scent-name medium';
+    document.getElementById('hero-reason').textContent = 'Open ScentVault settings to get your pairing code.';
+    render();
+    return;
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const { data: aiPicks } = await sb
+    .from('olfe_daily_recs')
+    .select('scent, brand, reason, rank')
+    .eq('user_id', USER_ID).eq('rec_date', today)
+    .order('rank', { ascending: true }).limit(5);
+
+  if (aiPicks?.length) {
+    PICKS = aiPicks.map(r => ({ name: r.scent, brand: r.brand ?? '', family: '', reason: r.reason ?? '' }));
+  } else {
+    const { data: frags } = await sb
+      .from('fragrances')
+      .select('name, brand, family, seasons, rating, times_worn')
+      .eq('user_id', USER_ID).eq('is_archived', false)
+      .order('times_worn', { ascending: false }).limit(30);
+
+    if (frags?.length) {
+      const season = ['Winter','Winter','Spring','Spring','Spring','Summer','Summer','Summer','Autumn','Autumn','Autumn','Winter'][new Date().getMonth()];
+      PICKS = frags
+        .map(f => ({ ...f, _s: (f.times_worn||0)*3 + (f.rating||0)*10 + (Array.isArray(f.seasons)&&f.seasons.includes(season)?15:0) }))
+        .sort((a, b) => b._s - a._s).slice(0, 5)
+        .map(f => ({ name: f.name, brand: f.brand||'', family: f.family||'', reason: buildFallbackReason(f, season) }));
+    } else {
+      PICKS = [{ name: 'Open OlfÃ© on your phone', brand: '', family: '', reason: "Let OlfÃ© generate today's picks first." }];
+    }
+  }
+
+  initPicks();
+  startRealtime();
+  subscribeHr();
+  render();
+}
+
+function buildFallbackReason(f, season) {
+  if (f.times_worn >= 10) return 'A favourite â€” worn ' + f.times_worn + ' times.';
+  if (Array.isArray(f.seasons) && f.seasons.includes(season)) return 'A great choice for ' + season + '.';
+  if (f.rating >= 4) return 'One of your highest-rated fragrances.';
+  if (f.family) return f.family + ' â€” a signature choice.';
+  return 'From your Atelier.';
+}
+
+// â”€â”€ Picks population â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function initPicks() {
+  PICKS.forEach((p, i) => {
+    const n = document.getElementById('o' + i + 'n');
+    const b = document.getElementById('o' + i + 'b');
+    const r = document.getElementById('o' + i + 'r');
+    if (n) { n.textContent = p.name; setNameSize(n, p.name); }
+    if (b) b.textContent = p.brand ? p.brand.toUpperCase() + (p.family ? ' Â· ' + p.family : '') : '';
+    if (r) r.textContent = p.reason;
+  });
+  if (PICKS.length) {
+    const p  = PICKS[0];
+    const hn = document.getElementById('hero-name');
+    document.getElementById('hero-reason').textContent = p.reason;
+    document.getElementById('hero-brand').textContent  = p.brand ? p.brand.toUpperCase() : '';
+    hn.textContent = p.name; setNameSize(hn, p.name);
+  }
+}
+
+function setNameSize(el, name) {
+  el.className = 'scent-name' + (name.length > 32 ? ' long' : name.length > 20 ? ' medium' : '');
+}
+
+// â”€â”€ Render navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function render() {
+  document.querySelectorAll('.col-tab').forEach(t => {
+    t.classList.toggle('active', +t.dataset.col === col);
+  });
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  if (overlayScreen) {
+    const ov = document.getElementById('s-' + overlayScreen);
+    if (ov) ov.classList.add('active');
+  } else {
+    const sc = document.getElementById('s-' + col + '-' + row);
+    if (sc) sc.classList.add('active');
+  }
+  const dots = document.getElementById('row-dots');
+  dots.innerHTML = '';
+  if (!overlayScreen) {
+    for (let i = 0; i < ROW_COUNTS[col]; i++) {
+      const d = document.createElement('div');
+      d.className = 'rdot' + (i === row ? ' active' : '');
+      dots.appendChild(d);
+    }
+  }
+  if (!overlayScreen) {
+    if (col === 1 && !vaultData)     loadVault();
+    if (col === 2 && !sillageData)   loadSillage();
+    if (col === 3 && !communityData) loadCommunity();
+    if (col === 2)                   drawHrRing(latestHr);
+  }
+}
+
+function flash() {
+  const f = document.getElementById('flash');
+  f.style.opacity = '1';
+  setTimeout(() => f.style.opacity = '0', 120);
+}
+
+// â”€â”€ Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function navigate(dc, dr) {
+  if (overlayScreen) return;
+  col = Math.max(0, Math.min(4, col + dc));
+  row = Math.max(0, Math.min(ROW_COUNTS[col] - 1, row + dr));
+  flash(); render();
+}
+function goCol(c) { col = c; row = 0; flash(); render(); }
+
+document.addEventListener('keydown', e => {
+  if (overlayScreen === 'post_scan' || overlayScreen === 'candidates') {
+    const btns = Array.from(document.querySelectorAll('#s-' + overlayScreen + ' .focusable'));
+    const idx = btns.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown' && idx < btns.length - 1) { btns[idx + 1].focus(); return; }
+    if (e.key === 'ArrowUp'   && idx > 0)               { btns[idx - 1].focus(); return; }
+    if (e.key === 'Enter' && idx >= 0) { btns[idx].click(); return; }
+    if (e.key === 'Escape') { dismissOverlay(); return; }
+  }
+  if (e.key === 'ArrowRight') navigate(1, 0);
+  else if (e.key === 'ArrowLeft') navigate(-1, 0);
+  else if (e.key === 'ArrowDown') navigate(0, 1);
+  else if (e.key === 'ArrowUp')   navigate(0, -1);
+  else if (e.key === 'Enter' && col === 0 && row === 1) document.getElementById('btn-scan').click();
+});
+
+let tx = 0, ty = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  const dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 35) navigate(dx < 0 ? 1 : -1, 0);
+  else if (Math.abs(dy) > 35) navigate(0, dy < 0 ? 1 : -1);
+});
+
+// â”€â”€ Scan / voice â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+document.getElementById('btn-scan').addEventListener('click', () => {
+  writeState('scan_requested', {});
+  overlayScreen = 'scanning';
+  document.getElementById('scan-name').textContent = 'Identifyingâ€¦';
+  render();
+});
+document.getElementById('btn-voice').addEventListener('click', () => {
+  writeState('voice_requested', {});
+});
+
+// â”€â”€ Post-scan actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+document.getElementById('ps-wear').addEventListener('click',   () => writeState('action_chosen', { action: 'wear',           ...scanPayload }));
+document.getElementById('ps-add').addEventListener('click',    () => writeState('action_chosen', { action: 'add_collection', ...scanPayload }));
+document.getElementById('ps-wish').addEventListener('click',   () => writeState('action_chosen', { action: 'wishlist',       ...scanPayload }));
+document.getElementById('ps-cancel').addEventListener('click', () => dismissOverlay());
+
+function dismissOverlay() { overlayScreen = null; scanPayload = {}; render(); }
+
+// â”€â”€ Realtime â€” phone â†’ glasses â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function startRealtime() {
+  sb.channel('glasses-state-' + USER_ID)
+    .on('postgres_changes', {
+      event: '*', schema: 'public',
+      table: 'glasses_session_state',
+      filter: 'user_id=eq.' + USER_ID,
+    }, payload => handleStateChange(payload.new))
+    .subscribe(status => {
+      document.getElementById('rt-dot').classList.toggle('live', status === 'SUBSCRIBED');
+    });
+}
+
+function handleStateChange(row) {
+  if (!row || !row.screen) return;
+  const screen = row.screen;
+  const p = row.payload || {};
+  if (screen === 'scanning') {
+    overlayScreen = 'scanning';
+    document.getElementById('scan-name').textContent = p.name ? 'Scanning ' + p.name + 'â€¦' : 'Identifyingâ€¦';
+    render(); return;
+  }
+  if (screen === 'post_scan') {
+    scanPayload = p; overlayScreen = 'post_scan';
+    const n = document.getElementById('ps-name');
+    n.textContent = p.name || 'â€”'; setNameSize(n, p.name || '');
+    document.getElementById('ps-brand').textContent = p.brand ? p.brand.toUpperCase() : '';
+    document.getElementById('ps-wear').focus();
+    render(); return;
+  }
+  if (screen === 'candidates') {
+    overlayScreen = 'candidates';
+    const list = document.getElementById('candidate-list');
+    list.innerHTML = '';
+    (p.candidates || []).forEach(c => {
+      const [name, brand] = c.split('|');
+      const btn = document.createElement('div');
+      btn.className = 'action-btn focusable'; btn.tabIndex = 0;
+      btn.textContent = name + (brand ? ' â€” ' + brand : '');
+      btn.style.marginBottom = '6px';
+      btn.addEventListener('click', () => writeState('candidate_chosen', { name, brand }));
+      list.appendChild(btn);
+    });
+    list.querySelector('.focusable')?.focus();
+    render(); return;
+  }
+  if (screen === 'action_done') {
+    overlayScreen = 'action_done';
+    const titles = { wear: '&#10003; Logged!', add_collection: '&#10003; Saved!', wishlist: '&#9733; Wishlisted!' };
+    document.getElementById('done-title').textContent = titles[p.action] || 'Done!';
+    document.getElementById('done-sub').textContent   = p.name || '';
+    render();
+    setTimeout(() => { overlayScreen = null; render(); }, 3000);
+    return;
+  }
+  if (screen === 'picks') { dismissOverlay(); return; }
+}
+
+async function writeState(screen, payload) {
+  await sb.from('glasses_session_state').upsert({
+    user_id: USER_ID, screen, payload,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: 'user_id' });
+}
+
+// â”€â”€ HR ring â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function drawHrRing(bpm) {
+  const canvas = document.getElementById('hr-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = 55, cy = 55, r = 46;
+  ctx.clearRect(0, 0, 110, 110);
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 8; ctx.stroke();
+  if (bpm > 0) {
+    const ratio = Math.min(1, Math.max(0, (bpm - 40) / 140));
+    const color = bpm < 70 ? '#4a8af5' : bpm < 100 ? '#C9A84C' : '#e05a5a';
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + ratio * Math.PI * 2);
+    ctx.strokeStyle = color; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.stroke();
+    ctx.shadowColor = color; ctx.shadowBlur = 10; ctx.stroke(); ctx.shadowBlur = 0;
+  }
+}
+
+// â”€â”€ Lazy data loaders â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+async function loadVault() {
+  const { data } = await sb.from('fragrances')
+    .select('id, name, brand, times_worn, worn_at')
+    .eq('user_id', USER_ID).eq('is_archived', false)
+    .order('times_worn', { ascending: false }).limit(20);
+  vaultData = data || [];
+  document.getElementById('vault-count').textContent = vaultData.length + ' fragrances';
+  document.getElementById('vault-sub').textContent   = 'Total in your collection';
+  const topList = document.getElementById('vault-top-list');
+  topList.innerHTML = '';
+  vaultData.slice(0, 5).forEach((f, i) => {
+    const div = document.createElement('div');
+    div.className = 'stat-row';
+    div.innerHTML =
+      '<span class="stat-label">' + (i+1) + '. ' + (f.name.length > 22 ? f.name.slice(0,22)+'â€¦' : f.name) + '</span>' +
+      '<span class="stat-value">' + (f.times_worn || 0) + 'x</span>';
+    topList.appendChild(div);
+  });
+  const lastList = document.getElementById('vault-last-list');
+  lastList.innerHTML = '';
+  const sorted = [...vaultData].filter(f => f.worn_at).sort((a,b) => new Date(b.worn_at) - new Date(a.worn_at));
+  sorted.slice(0, 4).forEach(f => {
+    const days = Math.floor((Date.now() - new Date(f.worn_at)) / 86400000);
+    const div = document.createElement('div');
+    div.className = 'stat-row';
+    div.innerHTML =
+      '<span class="stat-label">' + (f.name.length > 22 ? f.name.slice(0,22)+'â€¦' : f.name) + '</span>' +
+      '<span class="stat-value">' + (days === 0 ? 'today' : days + 'd ago') + '</span>';
+    lastList.appendChild(div);
+  });
+}
+
+async function loadSillage() {
+  const { data: logs } = await sb.from('wear_logs')
+    .select('heart_rate_bpm, worn_at, compliments_received')
+    .eq('user_id', USER_ID)
+    .not('heart_rate_bpm', 'is', null)
+    .order('worn_at', { ascending: false }).limit(30);
+  sillageData = logs || [];
+  const avgHr = sillageData.length
+    ? Math.round(sillageData.reduce((s, l) => s + (l.heart_rate_bpm || 0), 0) / sillageData.length) : 0;
+  const totalCompliments = sillageData.reduce((s, l) => s + (l.compliments_received || 0), 0);
+  document.getElementById('sillage-stats').innerHTML =
+    '<div class="stat-row"><span class="stat-label">Avg HR during wear</span><span class="stat-value">' + (avgHr || 'â€”') + ' bpm</span></div>' +
+    '<div class="stat-row"><span class="stat-label">Total compliments</span><span class="stat-value">' + totalCompliments + '</span></div>' +
+    '<div class="stat-row"><span class="stat-label">Wear sessions tracked</span><span class="stat-value">' + sillageData.length + '</span></div>';
+  const score = avgHr > 0 ? Math.round(Math.max(0, Math.min(100, 100 - ((avgHr - 60) / 60) * 100))) : 0;
+  const label = score >= 70 ? 'CALMING' : score >= 40 ? 'BALANCED' : 'ENERGIZING';
+  document.getElementById('serenity-content').innerHTML =
+    '<div class="heading" style="text-align:center">' + (score || 'â€”') + '</div>' +
+    '<div class="subhead" style="text-align:center">' + label + '</div>' +
+    '<div class="body-text" style="text-align:center">Your biometric serenity score based on heart rate during wear sessions.</div>';
+}
+
+async function loadCommunity() {
+  const { data: posts } = await sb.from('feed_posts')
+    .select('title, type').order('created_at', { ascending: false }).limit(8);
+  communityData = posts || [];
+  const feedList = document.getElementById('community-feed-list');
+  feedList.innerHTML = '';
+  communityData.filter(p => p.type === 'wear').slice(0, 4).forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'body-text'; div.style.marginBottom = '6px';
+    div.textContent = 'Â· ' + (p.title || '');
+    feedList.appendChild(div);
+  });
+  const poll = communityData.find(p => p.type === 'daily_poll');
+  document.getElementById('poll-q').textContent = poll?.title || 'No poll today';
+  const trivia = communityData.find(p => p.type === 'olfe_trivia');
+  document.getElementById('trivia-text').textContent = trivia?.title || 'Check back later for today\'s trivia.';
+  const trending = document.getElementById('trending-list');
+  trending.innerHTML = '';
+  communityData.filter(p => p.title).slice(0, 4).forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'stat-row';
+    div.innerHTML = '<span class="stat-label">' + (i+1) + '. ' + (p.title?.slice(0,28) || '') + '</span>';
+    trending.appendChild(div);
+  });
+}
+
+// â”€â”€ Live HR from Supabase Realtime (watch sends HR via phone) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function subscribeHr() {
+  sb.channel('hr-' + USER_ID)
+    .on('postgres_changes', {
+      event: 'INSERT', schema: 'public',
+      table: 'wear_hr_readings',
+      filter: 'user_id=eq.' + USER_ID,
+    }, p => {
+      latestHr = p.new.bpm || 0;
+      document.getElementById('hr-value').textContent = latestHr + ' BPM';
+      document.getElementById('hr-state').textContent =
+        latestHr < 70 ? 'Calm Â· CALMING' : latestHr < 100 ? 'Steady Â· BALANCED' : 'Elevated Â· ENERGIZING';
+      if (col === 2 && row === 0) drawHrRing(latestHr);
+    })
+    .subscribe();
+}
+
+// â”€â”€ Weather (client-side geolocation) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude: lat, longitude: lon } = pos.coords;
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current_weather=true&temperature_unit=fahrenheit')
+      .then(r => r.json()).then(d => {
+        const cw = d.current_weather;
+        if (!cw) return;
+        const temp = Math.round(cw.temperature);
+        const cond = cw.weathercode >= 61 ? 'rainy' : cw.weathercode >= 3 ? 'cloudy' : 'clear';
+        const icon = cond === 'rainy' ? '&#127783;' : cond === 'cloudy' ? '&#9925;' : '&#9728;';
+        document.getElementById('weather').textContent = icon + ' ' + temp + 'Â°F Â· ' + cond;
+      }).catch(() => {});
+  }, () => {});
+}
+
+setInterval(() => {
+  document.getElementById('time').textContent =
+    new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+}, 60000);
+
+// â”€â”€ Boot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+boot();
+</script>
+</body>
+</html>
